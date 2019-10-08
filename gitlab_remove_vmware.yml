@@ -1,0 +1,12 @@
+- name: Remove Gitlab Servers
+  hosts: all
+  gather_facts: False
+  connection: local
+  become: no
+  vars_files:
+    - node-config/nodes-vmware.yml
+
+  roles:
+    - role: ansible-role-vmware
+      role_action: deprovision
+      delegate_to: localhost
