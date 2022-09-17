@@ -1,5 +1,4 @@
 - hosts: all
-  vars:
   roles:
     - role: gitlab
-      become: yes
+      become: true

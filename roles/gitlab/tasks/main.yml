@@ -36,10 +36,16 @@
     gitlab_package_name: "{{ gitlab_edition }}{{ gitlab_package_version_separator }}{{ gitlab_version }}"
   when: gitlab_version != ''
 
-- name: Install GitLab
-  package:
-    name: "{{ gitlab_package_name | default(gitlab_edition) }}"
-    state: present
+- block:
+    - name: import gitlab gpg key
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg
+
+    - name: Install GitLab
+      package:
+        name: "{{ gitlab_package_name | default(gitlab_edition) }}"
+        state: present
   when: not gitlab_file.stat.exists
 
 # Start and configure GitLab. Sometimes the first run fails, but after that,
